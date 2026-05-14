@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Playwright::HackerNewsSearchJob, type: :job do
   let(:query)   { "vw polo" }
   let(:service) { instance_double(Playwright::HackerNews) }
-  let(:results) { [{ title: "Show HN: VW Polo dashboard hack", link: "https://example.com/polo-hack" }] }
+  let(:results) { [ { title: "Show HN: VW Polo dashboard hack", link: "https://example.com/polo-hack" } ] }
 
   before do
     allow(Playwright::HackerNews).to receive(:new).and_return(service)

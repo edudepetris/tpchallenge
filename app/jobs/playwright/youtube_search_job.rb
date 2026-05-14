@@ -18,7 +18,7 @@ class Playwright::YoutubeSearchJob < ApplicationJob
 
     results = Playwright::Youtube.new.search(query)
     Rails.logger.info("[Playwright::YoutubeSearchJob] query=#{query.inspect} count=#{results.size}")
-    
+
     Turbo::StreamsChannel.broadcast_update_to(
       :search,
       target: "youtube-thinking",

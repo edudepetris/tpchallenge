@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Playwright::RedditSearchJob, type: :job do
   let(:query)   { "vw polo" }
   let(:service) { instance_double(Playwright::Reddit) }
-  let(:results) { [{ title: "Best VW Polo mods", link: "https://old.reddit.com/r/cars/comments/aaa/" }] }
+  let(:results) { [ { title: "Best VW Polo mods", link: "https://old.reddit.com/r/cars/comments/aaa/" } ] }
 
   before do
     allow(Playwright::Reddit).to receive(:new).and_return(service)

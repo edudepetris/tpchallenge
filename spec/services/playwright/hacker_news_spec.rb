@@ -38,7 +38,7 @@ RSpec.describe Playwright::HackerNews do
       allow(page).to receive(:locator).with(described_class::RESULT_SELECTOR).and_return(results_locator)
       allow(results_locator).to receive(:first).and_return(first_locator)
       allow(first_locator).to receive(:wait_for)
-      allow(results_locator).to receive(:element_handles).and_return([anchor_one, anchor_two])
+      allow(results_locator).to receive(:element_handles).and_return([ anchor_one, anchor_two ])
 
       allow_any_instance_of(Playwright::Result).to receive(:broadcast)
     end
@@ -53,10 +53,10 @@ RSpec.describe Playwright::HackerNews do
     it "returns an array of Playwright::Result objects with source=hacker_news" do
       results = service.search(query)
 
-      expect(results.map(&:class).uniq).to eq([Playwright::Result])
-      expect(results.map { |r| [r.title, r.link, r.source] }).to eq([
-        ["Show HN: VW Polo dashboard hack", "https://example.com/polo-hack",       "hacker_news"],
-        ["Ask HN: VW Polo OBD tooling?",    "https://hn.algolia.com/comments/123", "hacker_news"],
+      expect(results.map(&:class).uniq).to eq([ Playwright::Result ])
+      expect(results.map { |r| [ r.title, r.link, r.source ] }).to eq([
+        [ "Show HN: VW Polo dashboard hack", "https://example.com/polo-hack",       "hacker_news" ],
+        [ "Ask HN: VW Polo OBD tooling?",    "https://hn.algolia.com/comments/123", "hacker_news" ]
       ])
     end
 

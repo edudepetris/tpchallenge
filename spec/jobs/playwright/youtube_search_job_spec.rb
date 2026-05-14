@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Playwright::YoutubeSearchJob, type: :job do
   let(:query)   { "vw polo" }
   let(:service) { instance_double(Playwright::Youtube) }
-  let(:results) { [{ title: "VW Polo Review", link: "https://www.youtube.com/watch?v=aaa" }] }
+  let(:results) { [ { title: "VW Polo Review", link: "https://www.youtube.com/watch?v=aaa" } ] }
 
   before do
     allow(Playwright::Youtube).to receive(:new).and_return(service)

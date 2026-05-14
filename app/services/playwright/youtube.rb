@@ -8,7 +8,7 @@ class Playwright::Youtube
   PLAYWRIGHT_CLI = ENV.fetch("PLAYWRIGHT_CLI_EXECUTABLE_PATH", "npx playwright").freeze
 
   def search(query, limit: MAX_LIMIT)
-    limit = [limit.to_i, MAX_LIMIT].min
+    limit = [ limit.to_i, MAX_LIMIT ].min
     limit = MAX_LIMIT if limit <= 0
     results = []
 

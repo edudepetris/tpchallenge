@@ -34,7 +34,7 @@ RSpec.describe Playwright::Reddit do
       allow(page).to receive(:goto)
       allow(page).to receive(:wait_for_selector)
       allow(page).to receive(:query_selector_all).with(described_class::RESULT_SELECTOR)
-                                                 .and_return([anchor_one, anchor_two])
+                                                 .and_return([ anchor_one, anchor_two ])
 
       allow_any_instance_of(Playwright::Result).to receive(:broadcast)
     end
@@ -63,10 +63,10 @@ RSpec.describe Playwright::Reddit do
     it "returns an array of Playwright::Result objects with source=reddit" do
       results = service.search(query)
 
-      expect(results.map(&:class).uniq).to eq([Playwright::Result])
-      expect(results.map { |r| [r.title, r.link, r.source] }).to eq([
-        ["Best VW Polo mods",         "https://www.reddit.com/r/cars/comments/aaa/best_vw_polo_mods/", "reddit"],
-        ["VW Polo GTI review thread", "https://www.reddit.com/r/cars/comments/bbb/",                   "reddit"],
+      expect(results.map(&:class).uniq).to eq([ Playwright::Result ])
+      expect(results.map { |r| [ r.title, r.link, r.source ] }).to eq([
+        [ "Best VW Polo mods",         "https://www.reddit.com/r/cars/comments/aaa/best_vw_polo_mods/", "reddit" ],
+        [ "VW Polo GTI review thread", "https://www.reddit.com/r/cars/comments/bbb/",                   "reddit" ]
       ])
     end
 

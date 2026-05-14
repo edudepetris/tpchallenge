@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resource :search, only: [:show, :create], controller: "search"
+  resource :search, only: [ :show, :create ], controller: "search"
   root "search#show"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
