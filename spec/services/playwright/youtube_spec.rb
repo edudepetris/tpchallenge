@@ -47,6 +47,8 @@ RSpec.describe Playwright::Youtube do
       allow(results_locator).to receive(:first).and_return(first_locator)
       allow(first_locator).to receive(:wait_for)
       allow(results_locator).to receive(:element_handles).and_return([anchor_one, anchor_two])
+
+      allow_any_instance_of(Playwright::Result).to receive(:broadcast)
     end
 
     it "navigates to the YouTube search URL with the encoded query" do
@@ -56,20 +58,33 @@ RSpec.describe Playwright::Youtube do
       service.search(query)
     end
 
-    it "returns an array of { title:, link: } hashes" do
+    it "returns an array of Playwright::Result objects with source=youtube" do
       results = service.search(query)
 
-      expect(results).to eq([
-        { title: "VW Polo Review", link: "https://www.youtube.com/watch?v=aaa" },
-        { title: "VW Polo GTI",    link: "https://youtu.be/bbb" },
+      expect(results.map(&:class).uniq).to eq([Playwright::Result])
+      expect(results.map { |r| [r.title, r.link, r.source] }).to eq([
+        ["VW Polo Review", "https://www.youtube.com/watch?v=aaa", "youtube"],
+        ["VW Polo GTI",    "https://youtu.be/bbb",                "youtube"],
       ])
+    end
+
+    it "broadcasts each result immediately after building it" do
+      broadcasted = []
+      allow_any_instance_of(Playwright::Result).to receive(:broadcast) do |instance|
+        broadcasted << instance
+      end
+
+      results = service.search(query)
+
+      expect(broadcasted.size).to eq(2)
+      expect(broadcasted).to eq(results)
     end
 
     it "honors the limit argument" do
       results = service.search(query, limit: 1)
 
       expect(results.size).to eq(1)
-      expect(results.first[:title]).to eq("VW Polo Review")
+      expect(results.first.title).to eq("VW Polo Review")
     end
 
     it "caps the limit at MAX_LIMIT (10) even when a larger value is requested" do

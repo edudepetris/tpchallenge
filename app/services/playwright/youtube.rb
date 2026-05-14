@@ -4,6 +4,7 @@ module Playwright
   class Youtube
     SEARCH_URL = "https://www.youtube.com/results".freeze
     RESULT_SELECTOR = "ytd-video-renderer a#video-title".freeze
+    SOURCE = "youtube".freeze
     MAX_LIMIT = 10
     PLAYWRIGHT_CLI = ENV.fetch("PLAYWRIGHT_CLI_EXECUTABLE_PATH", "npx playwright").freeze
 
@@ -28,7 +29,9 @@ module Playwright
             next if title.empty? || href.empty?
 
             link = href.start_with?("http") ? href : "https://www.youtube.com#{href}"
-            results << { title: title, link: link }
+            result = ::Playwright::Result.new(title: title, link: link, source: SOURCE)
+            result.broadcast
+            results << result
           end
         end
       end
