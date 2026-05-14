@@ -8,6 +8,7 @@ RSpec.describe Playwright::YoutubeSearchJob, type: :job do
   before do
     allow(Playwright::Youtube).to receive(:new).and_return(service)
     allow(service).to receive(:search).with(query).and_return(results)
+    allow(Turbo::StreamsChannel).to receive(:broadcast_update_to)
   end
 
   it "calls Playwright::Youtube#search with the given query" do
@@ -16,23 +17,29 @@ RSpec.describe Playwright::YoutubeSearchJob, type: :job do
     expect(service).to have_received(:search).with(query)
   end
 
-  it "returns the search results" do
-    expect(described_class.perform_now(query)).to eq(results)
-  end
-
   it "is enqueued on the default queue" do
     expect {
       described_class.perform_later(query)
     }.to have_enqueued_job(described_class).with(query).on_queue("default")
   end
 
-  it "broadcasts the skeleton placeholder to the :search stream targeting youtube-results" do
-    expect(Turbo::StreamsChannel).to receive(:broadcast_update_to).with(
+  it "broadcasts the skeleton placeholder to the :search stream targeting youtube-thinking" do
+    described_class.perform_now(query)
+
+    expect(Turbo::StreamsChannel).to have_received(:broadcast_update_to).with(
       :search,
-      target: "youtube-results",
+      target: "youtube-thinking",
       html: described_class::SKELETON_HTML,
     )
+  end
 
+  it "clears the youtube-thinking target once the search completes" do
     described_class.perform_now(query)
+
+    expect(Turbo::StreamsChannel).to have_received(:broadcast_update_to).with(
+      :search,
+      target: "youtube-thinking",
+      html: "",
+    )
   end
 end

@@ -12,12 +12,17 @@ class Playwright::RedditSearchJob < ApplicationJob
   def perform(query)
     Turbo::StreamsChannel.broadcast_update_to(
       :search,
-      target: "reddit-results",
+      target: "reddit-thinking",
       html: SKELETON_HTML,
     )
 
     results = Playwright::Reddit.new.search(query)
     Rails.logger.info("[Playwright::RedditSearchJob] query=#{query.inspect} count=#{results.size}")
-    results
+
+    Turbo::StreamsChannel.broadcast_update_to(
+      :search,
+      target: "reddit-thinking",
+      html: "",
+    )
   end
 end

@@ -12,12 +12,17 @@ class Playwright::YoutubeSearchJob < ApplicationJob
   def perform(query)
     Turbo::StreamsChannel.broadcast_update_to(
       :search,
-      target: "youtube-results",
+      target: "youtube-thinking",
       html: SKELETON_HTML,
     )
 
     results = Playwright::Youtube.new.search(query)
     Rails.logger.info("[Playwright::YoutubeSearchJob] query=#{query.inspect} count=#{results.size}")
-    results
+    
+    Turbo::StreamsChannel.broadcast_update_to(
+      :search,
+      target: "youtube-thinking",
+      html: "",
+    )
   end
 end
