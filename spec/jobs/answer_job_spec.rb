@@ -15,6 +15,12 @@ RSpec.describe AnswerJob, type: :job do
     }.to have_enqueued_job(Playwright::RedditSearchJob).with(query).on_queue("default")
   end
 
+  it "enqueues a Playwright::HackerNewsSearchJob with the query" do
+    expect {
+      described_class.perform_now(query)
+    }.to have_enqueued_job(Playwright::HackerNewsSearchJob).with(query).on_queue("default")
+  end
+
   it "is itself enqueued on the default queue" do
     expect {
       described_class.perform_later(query)
