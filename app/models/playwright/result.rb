@@ -1,23 +1,23 @@
-module Playwright
-  class Result
-    include ActiveModel::Model
-    include ActiveModel::Attributes
+require "playwright"
 
-    STREAM = :search
+class Playwright::Result
+  include ActiveModel::Model
+  include ActiveModel::Attributes
 
-    attribute :title,  :string
-    attribute :link,   :string
-    attribute :source, :string
+  STREAM = :search
 
-    validates :title, :link, :source, presence: true
+  attribute :title,  :string
+  attribute :link,   :string
+  attribute :source, :string
 
-    def broadcast
-      Turbo::StreamsChannel.broadcast_append_to(
-        STREAM,
-        target: "#{source}-results",
-        partial: "playwright/results/result",
-        locals: { result: self },
-      )
-    end
+  validates :title, :link, :source, presence: true
+
+  def broadcast
+    Turbo::StreamsChannel.broadcast_append_to(
+      STREAM,
+      target: "#{source}-results",
+      partial: "playwright/results/result",
+      locals: { result: self },
+    )
   end
 end
