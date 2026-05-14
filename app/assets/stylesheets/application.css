@@ -143,6 +143,19 @@ body {
   font-size: 14px;
 }
 
+.panel__link {
+  color: #b8c4d6;
+  text-decoration: none;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.panel__link:hover,
+.panel__link:focus {
+  color: var(--text);
+  text-decoration: underline;
+}
+
 .panel__skeleton {
   height: 14px;
   background: linear-gradient(90deg, var(--surface-2), #262b36, var(--surface-2));

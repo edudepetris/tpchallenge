@@ -21,10 +21,8 @@
       <article id="<%= source[:key] %>" class="panel panel--pending panel--<%= source[:key] %>" data-source="<%= source[:key] %>">
         <header class="panel__head">
           <h2 class="panel__title"><%= source[:name] %></h2>
-          <span class="panel__status" data-state="launching">
-            <span class="panel__spinner" aria-hidden="true"></span>
-          </span>
         </header>
+        <div id="<%= source[:key] %>-thinking"></div>
         <div id="<%= source[:key] %>-results"></div>
       </article>
     <% end %>
