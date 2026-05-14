@@ -1,4 +1,5 @@
 <% content_for :title, "Search" %>
+<%= turbo_stream_from :search %>
 
 <main class="search">
   <%= form_with url: search_path, method: :post, class: "search__form" do |f| %>
@@ -17,19 +18,14 @@
          { key: "reddit",      name: "Reddit" },
          { key: "hacker_news", name: "Hacker News" }
        ].each do |source| %>
-      <article class="panel panel--pending panel--<%= source[:key] %>" data-source="<%= source[:key] %>">
+      <article id="<%= source[:key] %>" class="panel panel--pending panel--<%= source[:key] %>" data-source="<%= source[:key] %>">
         <header class="panel__head">
           <h2 class="panel__title"><%= source[:name] %></h2>
           <span class="panel__status" data-state="launching">
             <span class="panel__spinner" aria-hidden="true"></span>
-            launching…
           </span>
         </header>
-        <ul class="panel__list">
-          <li class="panel__skeleton"></li>
-          <li class="panel__skeleton"></li>
-          <li class="panel__skeleton"></li>
-        </ul>
+        <div id="<%= source[:key] %>-results"></div>
       </article>
     <% end %>
   </section>
