@@ -3,5 +3,6 @@ class AnswerJob < ApplicationJob
 
   def perform(query)
     Playwright::YoutubeSearchJob.perform_later(query)
+    Playwright::RedditSearchJob.perform_later(query)
   end
 end
