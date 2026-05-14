@@ -1,0 +1,36 @@
+<% content_for :title, "Search" %>
+
+<main class="search">
+  <%= form_with url: search_path, method: :post, class: "search__form" do |f| %>
+    <%= f.label :q, "Query", class: "search__label" %>
+    <%= f.search_field :q,
+                       value: params[:q],
+                       placeholder: "e.g. blue running shoes size 10",
+                       autofocus: true,
+                       class: "search__input" %>
+    <%= f.submit "Go", class: "search__submit" %>
+  <% end %>
+
+  <section class="results" aria-live="polite">
+    <% [
+         { key: "youtube",     name: "YouTube" },
+         { key: "reddit",      name: "Reddit" },
+         { key: "hacker_news", name: "Hacker News" }
+       ].each do |source| %>
+      <article class="panel panel--pending panel--<%= source[:key] %>" data-source="<%= source[:key] %>">
+        <header class="panel__head">
+          <h2 class="panel__title"><%= source[:name] %></h2>
+          <span class="panel__status" data-state="launching">
+            <span class="panel__spinner" aria-hidden="true"></span>
+            launching…
+          </span>
+        </header>
+        <ul class="panel__list">
+          <li class="panel__skeleton"></li>
+          <li class="panel__skeleton"></li>
+          <li class="panel__skeleton"></li>
+        </ul>
+      </article>
+    <% end %>
+  </section>
+</main>
